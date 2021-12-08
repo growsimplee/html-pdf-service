@@ -16,7 +16,7 @@
 	<name>HTML to PDF Service</name>
 	<description>Convert HTML to PDF using Flying-Saucer-PDF library</description>
 
-	<packaging>war</packaging>
+	<packaging>${packaging.type}</packaging>
 
 	<scm>
 		<connection>scm:git:git://github.com/farrukhmpk/html-pdf-service.git</connection>
@@ -217,6 +217,12 @@
 
 	<profiles>
 		<profile>
+			<id>jar</id>
+			<properties>
+				<packaging.type>jar</packaging.type>
+			</properties>
+		</profile>
+		<profile>
 			<id>standalone</id>
 			<properties>
 				<log.location>logs</log.location>
@@ -228,6 +234,7 @@
 				<activeByDefault>true</activeByDefault>
 			</activation>
 			<properties>
+				<packaging.type>war</packaging.type>
 				<log.location>${d}{catalina.home}/logs</log.location>
 			</properties>
 			<dependencies>
