@@ -3,7 +3,7 @@ version: '3'
 services:
   django:
     &django
-    image: 229301422682.dkr.ecr.ap-south-1.amazonaws.com/dev-html
+    image: ${DOCKER_REGISTER}/${DOCKER_IMAGE}-html
     build:
       context: ../
       dockerfile: ./docker/Dockerfile
