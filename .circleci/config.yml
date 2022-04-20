@@ -91,6 +91,43 @@ jobs:
       - run:
           name: "Update service"
           command: aws ecs update-service --cluster "Springboot-Dev-Simplee-Grow" --service "stage-html" --force-new-deployment
+  build_and_push_prod:
+    executor: docker_build
+
+    steps:
+      - checkout
+      - aws-cli/setup:
+          aws-access-key-id: ACCESS_KEY_ID
+          aws-secret-access-key: AWS_ACCESS_KEY
+          aws-region: AWS_REGION
+      - run:
+          name: "Login docker"
+          command: "docker login -u AWS -p  $(aws ecr get-login-password --region ap-south-1) 229301422682.dkr.ecr.ap-south-1.amazonaws.com"
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "pom.xml" }} # appends cache key with a hash of pom.xml file
+            - v1-dependencies- # fallback in case previous cache key is not found
+      - run:
+          name: "Build jar"
+          command: |
+            mv src/main/resources/application-prod-docker.properties src/main/resources/application.properties
+            mvn clean install -P jar -DskipTests=true
+      - store_artifacts:
+          path: ./target/*.jar
+      - save_cache:
+          paths:
+            - ~/.m2
+          key: v1-dependencies-{{ checksum "pom.xml" }}
+      - run:
+          name: "Docker build"
+          command: |
+            cd docker
+            DOCKER_REGISTRY="229301422682.dkr.ecr.ap-south-1.amazonaws.com" DOCKER_IMAGE=prod docker-compose build
+            DOCKER_REGISTRY="229301422682.dkr.ecr.ap-south-1.amazonaws.com" DOCKER_IMAGE=prod docker-compose push
+      - run:
+          name: "Update service"
+          command: aws ecs update-service --cluster "Springboot-Prod-Simplee-Grow" --service "prod-html" --force-new-deployment
+
 
 
 workflows:
@@ -107,7 +144,11 @@ workflows:
           filters:
             branches:
               only: stage
-
+      - build_and_push_prod:
+          context: Aws-prod
+          filters:
+            branches:
+              only: prod-docker
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 
