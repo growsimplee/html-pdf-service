@@ -126,7 +126,7 @@ jobs:
             DOCKER_REGISTRY="229301422682.dkr.ecr.ap-south-1.amazonaws.com" DOCKER_IMAGE=prod docker-compose push
       - run:
           name: "Update service"
-          command: aws ecs update-service --cluster "Springboot-Prod-Simplee-Grow" --service "prod-html" --force-new-deployment
+          command: aws ecs update-service --cluster "Springboot-Simplee-Grow" --service "Prod-html" --force-new-deployment
 
 
 
