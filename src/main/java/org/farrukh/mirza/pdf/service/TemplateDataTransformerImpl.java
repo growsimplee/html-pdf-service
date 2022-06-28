@@ -73,9 +73,6 @@ public class TemplateDataTransformerImpl extends BaseImpl implements TemplateDat
 	@Override
 	public String transformHTMLTemplate(String htmlTemplate, String jsonObject) {
 		try {
-			// Replace &<space> with &amp;
-			jsonObject = jsonObject.replaceAll("(&\\w*)(?!&.*;) ", "&amp; ");
-
 			logger.info("Json Obj: " + jsonObject);
 
 			////// REPEAT TAG CODE - START /////
@@ -93,7 +90,6 @@ public class TemplateDataTransformerImpl extends BaseImpl implements TemplateDat
 
 			List<String> keys = getUniqueKeysFromTemplate(htmlTemplate);
 			Map<String, String> keyVals = getValuesFromJson(keys, jsonObject);
-
 			keys.stream().forEach(k -> logger.trace("Key: " + k));
 			keyVals.entrySet().stream()
 					.forEach(entry -> logger.trace("Key: " + entry.getKey() + ", Val: " + entry.getValue()));
@@ -113,8 +109,6 @@ public class TemplateDataTransformerImpl extends BaseImpl implements TemplateDat
 	@Override
 	public List<String> transformHTMLTemplates(String htmlTemplate, String jsonData) {
 		try {
-			// Replace &<space> with &amp;
-			jsonData = jsonData.replaceAll("(&\\w*)(?!&.*;) ", "&amp; ");
 
 			List<String> html = new ArrayList<>();
 
