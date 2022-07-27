@@ -31,16 +31,19 @@ import org.springframework.boot.autoconfigure.web.WebMvcAutoConfiguration.WebMvc
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
+import org.springframework.web.servlet.config.annotation.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Configuration
 @EnableWebMvc
 public class MvcConfig extends WebMvcAutoConfigurationAdapter {
+
+	@Override
+	public void addCorsMappings(CorsRegistry registry) {
+		super.addCorsMappings(registry);
+		registry.addMapping("/**").allowedOrigins("*").allowedMethods("*").allowedHeaders("*");
+	}
 
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
