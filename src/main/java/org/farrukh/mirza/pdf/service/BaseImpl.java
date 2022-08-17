@@ -45,8 +45,8 @@ public abstract class BaseImpl {
 	protected String correctHtml(String html) {
 		html = html.replaceAll("&nbsp;", "&#160;");
 //		html = html.replaceAll(" & ", " &amp; ");
-		html = html.replaceAll("(&\\w*)(?!&.*;) ", "&amp; ");// Replace &<space> with &amp;
-
+		//html = html.replaceAll("(&\\w*)(?!&.*;) ", "&amp; ");// Replace &<space> with &amp;
+		html = html.replaceAll("(?!&quot;)(?!&lt;)(?!&gt;)(?!&amp;)(?!&apos;)(?!&#92;)(?!&#36;)(&)", "&amp;");
 		return html;
 	}
 
