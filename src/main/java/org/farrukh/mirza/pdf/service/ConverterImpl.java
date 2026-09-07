@@ -58,6 +58,15 @@ public class ConverterImpl extends BaseImpl implements Converter {
 			//This ITextRenderer is from the Flying Saucer library under LGPL license.
 			//Should not be confused with the actual iText library.
 			ITextRenderer r = new ITextRenderer();
+
+			// By default Flying Saucer fetches every embedded resource (e.g. <img src="...">)
+			// with no connect/read timeout, so a single slow/unreachable host can hang this
+			// whole conversion. Bound every resource fetch and skip (rather than hang on)
+			// anything that doesn't respond in time.
+			TimeoutAwareITextUserAgent userAgent = new TimeoutAwareITextUserAgent(r.getOutputDevice());
+			userAgent.setSharedContext(r.getSharedContext());
+			r.getSharedContext().setUserAgentCallback(userAgent);
+
 			r.setDocumentFromString(html);
 			r.layout();
 			r.createPDF(out);
