@@ -9,11 +9,17 @@ orbs:
   aws-cli: circleci/aws-cli@2.0.0
   aws-ecs: circleci/aws-ecs@2.2.1
 
+#executors:
+#  docker_build:
+#    machine:
+#      image: ubuntu-2004:202010-01
+#      resource_class: medium
+
 executors:
   docker_build:
     machine:
-      image: ubuntu-2004:202010-01
-      resource_class: medium
+      image: ubuntu-2204:current
+    resource_class: medium
 
 jobs:
   build_and_push_dev:
